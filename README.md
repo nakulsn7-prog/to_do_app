@@ -1,13 +1,17 @@
 # to_do_app
 
-# Product Requirement Document (PRD): Smart Task & Productivity App
+# Product Requirement Document (PRD): Smart Task & Productivity App (Offline-First Edition)
 
-## 1. Product Overview
-The Smart Task & Productivity App is a high-performance, architecture-driven task management application designed to help users categorize, track, and complete daily tasks. By gamifying productivity through streaks and visual data analytics, the app keeps users engaged. 
+## 1. Product Overview & Architectural Strategy
+The Smart Task & Productivity App is a local-first, low-latency task management and analytics application. To deliver an instantaneous user experience ($0\text{ms}$ local interface response time) and completely resilient offline operations, the application implements an **Offline-First Architectural Pattern** leveraging **PowerSync** as the client sync layer and **Supabase** as the cloud database ecosystem.
 
-The codebase follows a practical clean architecture pattern using a feature-first presentation folder structure (`lib/`) and autonomous infrastructure/domain modules (`packages/`).
+### 🔄 The Offline-First Data Strategy
+1. **The Presentation and State Layers (`lib/`)** read and write modifications exclusively against local database storage interfaces. They remain completely agnostic to network connectivity shifts.
+2. **The Client Infrastructure Layer (`packages/database_client`)** encapsulates third-party SDK dependencies (`supabase_flutter` and `powersync`), executing statements directly against the local cache for immediate $0\text{ms}$ turnaround.
+3. **The Synchronization Engine Middleware** runs asynchronous background workers to automatically mirror local cache mutations back to Supabase Cloud tables and stream downstream remote mutations back to the device.
 
----
+[Offline-First Dependency Flow]
+UI (lib/) ──> BLoC/Cubit ──> TaskRepository ──> PowerSync/Local DB Interface ──> Supabase Cloud
 
 ## 2. Core Feature & Architectural Specifications
 
