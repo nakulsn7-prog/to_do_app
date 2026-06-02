@@ -1,6 +1,6 @@
 import '../models/task.dart';
 
-abstract class DatabaseClient {
+abstract class TaskRepository {
   Future<void> createTask(Task task);
 
   Future<void> updateTask(Task task);
